@@ -63,10 +63,10 @@ void DBUS_Decode(uint8_t *data, uint16_t *data_decoded)
     data_decoded[3] = ((((uint16_t)data[4] >> 1) | ((uint16_t)data[5] << 7)) & 0x07FF)-1024;
 
     // S1 开关: Byte 5 的位 4 和位 5
-    data_decoded[4] = (data[5] >> 4) & 0x0003;
+    data_decoded[4] = (data[5] >> 6) & 0x0003;
 
     // S2 开关: Byte 5 的位 6 和位 7
-    data_decoded[5] = (data[5] >> 6) & 0x0003;
+    data_decoded[5] = (data[5] >> 4) & 0x0003;
     
     // 注意：data[6] 之后的数据（鼠标、键盘信息）在此函数中被跳过
 }
