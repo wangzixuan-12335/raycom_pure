@@ -35,6 +35,10 @@
 #define __HANDLE_EXT extern
 #endif
 
+//遥控器
+__HANDLE_EXT uint8_t usart1_raw_data[18];
+__HANDLE_EXT int16_t usart1_data_decoded[6];
+
 // Stone Id
 __HANDLE_EXT uint8_t Board_Id, Robot_Id;
 

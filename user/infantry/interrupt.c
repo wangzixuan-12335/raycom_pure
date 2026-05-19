@@ -1,8 +1,9 @@
 /**
  * @brief  中断服务函数根据地
  */
-
+#include "Driver_MyUSART.h"
 #include "handle.h"
+
 // EXTI9_5 陀螺仪中断
 void EXTI9_5_IRQHandler(void) {
     uint8_t suc;
@@ -17,25 +18,33 @@ void EXTI9_5_IRQHandler(void) {
 
 // DBus空闲中断(USART1)
 void USART1_IRQHandler(void) {
-    uint8_t UARTtemp;
+    if (USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)
+    {
+        /**
+         * 【核心：清除空闲中断标志位】
+         * 必须先读 SR 寄存器，再读 DR 寄存器，这是 F427 硬件手册规定的清除序列
+         */
+        volatile uint32_t temp;
+        temp = USART1->SR;
+        temp = USART1->DR;
 
-    UARTtemp = USART1->DR;
-    UARTtemp = USART1->SR;
+        // 1. 停止 DMA 数据流，准备处理缓存
+        DMA_Cmd(DMA2_Stream2, DISABLE);
 
-    DMA_Cmd(DMA2_Stream2, DISABLE);
+        // 2. 计算实际接收到的字节数
+        // 这里的 18 必须对应你设置 DMA_BufferSize 的值
+        uint16_t rx_len = 18 - DMA_GetCurrDataCounter(DMA2_Stream2);
 
-    // disabe DMA
-    DMA_Disable(USART1_Rx);
+        // 3. 长度校验：只有刚好收到 18 字节才认为是合法的 DBUS 数据包        
+        DBUS_Decode(usart1_raw_data, usart1_data_decoded);
 
-    // 数据量正确
-    if (DMA_Get_Stream(USART1_Rx)->NDTR == DBUS_BACK_LENGTH) {
-        DBus_Update(&remoteData, &keyboardData, &mouseData, remoteBuffer); //解码
+        // 4. 重置 DMA 计数器并重新开启
+        // 必须先置 18，再使能，DMA 才能重新开始从 buf[0] 接收
+        DMA_SetCurrDataCounter(DMA2_Stream2, 18);
+        DMA_Cmd(DMA2_Stream2, ENABLE);
+        USART_ClearITPendingBit(USART1,USART_IT_IDLE);
     }
-
-    // enable DMA
-    DMA_Enable(USART1_Rx, DBUS_LENGTH + DBUS_BACK_LENGTH);
 }
-
 /**
  * @brief USART3 串口中断
  * @note  视觉系统读取
