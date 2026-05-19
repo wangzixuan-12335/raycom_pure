@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F427II</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.17.1</PackID>
+          <PackID>Keil.STM32F4xx_DFP.3.1.1</PackID>
           <PackURL>https://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x30000) IRAM2(0x10000000,0x10000) IROM(0x08000000,0x200000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -603,6 +603,26 @@
               <FileName>Driver_Vofa.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\driver\src\Driver_Vofa.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyUSART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MyUSART.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyUSART.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyUSART.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyDMA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\src\Driver_MyDMA.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyDMA.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyDMA.h</FilePath>
             </File>
           </Files>
         </Group>
