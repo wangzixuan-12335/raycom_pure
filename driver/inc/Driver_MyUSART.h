@@ -1,6 +1,18 @@
 #include "stm32f4xx.h"
 #ifndef __MY_USART_H
 #define __MY_USART_H
+
+typedef struct
+{
+    int16_t r2x;
+    int16_t r2y;
+    int16_t r1x;
+    int16_t r1y;
+    int16_t s2;
+    int16_t s1;
+}usart1_data_decoded_type;
+
+
 void MY_USART_Init();
-void DBUS_Decode(uint8_t *data, uint16_t *data_decoded);
+void DBUS_Decode(uint8_t *data, usart1_data_decoded_type *data_decoded);
 #endif

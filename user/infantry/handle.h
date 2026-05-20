@@ -1,3 +1,13 @@
+/*
+ * @Author: Zixuan Wang tanng@163.com
+ * @Date: 2026-05-19 21:48:45
+ * @LastEditors: Zixuan Wang tanng@163.com
+ * @LastEditTime: 2026-05-20 20:17:16
+ * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\handle.h
+ * @Description: 
+ * 
+ * Copyright (c) 2026 by ${git_name_email}, All Rights Reserved. 
+ */
 #ifndef __HANDLE_H
 #define __HANDLE_H
 
@@ -40,7 +50,7 @@
 
 //遥控器
 __HANDLE_EXT uint8_t usart1_raw_data[18];
-__HANDLE_EXT int16_t usart1_data_decoded[6];
+__HANDLE_EXT usart1_data_decoded_type usart1_data_decoded;
 
 // Stone Id
 __HANDLE_EXT uint8_t Board_Id, Robot_Id;

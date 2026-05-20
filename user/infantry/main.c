@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-20 11:06:53
+ * @LastEditTime: 2026-05-20 19:59:12
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\main.c
  * @Description: 
  * 
@@ -22,9 +22,13 @@
 void main(void) {
     MY_USART_Init();
     MyDMA_Init((uint32_t)&(USART1->DR),(uint32_t)usart1_raw_data,18);
+    
+    BSP_CAN_Init();
+
     while (1)
     {
         /* code */
+        //Can_Send(CAN1,0x200,0,0,usart1_data_decoded[3],0);
     }
     
 }

@@ -1,4 +1,15 @@
+/*
+ * @Author: Zixuan Wang tanng@163.com
+ * @Date: 2026-05-19 22:39:25
+ * @LastEditors: Zixuan Wang tanng@163.com
+ * @LastEditTime: 2026-05-20 20:19:54
+ * @FilePath: \mdkd:\Desktop\电控\raycom_pure\driver\src\Driver_MyUSART.c
+ * @Description: 
+ * 
+ * Copyright (c) 2026 by ${git_name_email}, All Rights Reserved. 
+ */
 #include "stm32f4xx.h"
+#include "handle.h"
 
 void MY_USART_Init(){
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
@@ -48,25 +59,25 @@ void MY_USART_Init(){
     NVIC_Init(&NVIC_InitStructure);
 }
 
-void DBUS_Decode(uint8_t *data, uint16_t *data_decoded)
+void DBUS_Decode(uint8_t *data, usart1_data_decoded_type *data_decoded)
 {
     // 通道 0: Byte 0 + Byte 1 的低 3 位
-    data_decoded[0] = (((uint16_t)data[0] | ((uint16_t)data[1] << 8)) & 0x07FF)-1024;
+    data_decoded->r2x = (((uint16_t)data[0] | ((uint16_t)data[1] << 8)) & 0x07FF)-1024;
 
     // 通道 1: Byte 1 的高 5 位 + Byte 2 的低 6 位
-    data_decoded[1] = ((((uint16_t)data[1] >> 3) | ((uint16_t)data[2] << 5)) & 0x07FF)-1024;
+    data_decoded->r2y = ((((uint16_t)data[1] >> 3) | ((uint16_t)data[2] << 5)) & 0x07FF)-1024;
 
     // 通道 2: Byte 2 的高 2 位 + Byte 3 的全部 + Byte 4 的低 1 位
-    data_decoded[2] = ((((uint16_t)data[2] >> 6) | ((uint16_t)data[3] << 2) | ((uint16_t)data[4] << 10)) & 0x07FF)-1024;
+    data_decoded->r1x = ((((uint16_t)data[2] >> 6) | ((uint16_t)data[3] << 2) | ((uint16_t)data[4] << 10)) & 0x07FF)-1024;
 
     // 通道 3: Byte 4 的高 7 位 + Byte 5 的低 4 位
-    data_decoded[3] = ((((uint16_t)data[4] >> 1) | ((uint16_t)data[5] << 7)) & 0x07FF)-1024;
+    data_decoded->r1y = ((((uint16_t)data[4] >> 1) | ((uint16_t)data[5] << 7)) & 0x07FF)-1024;
 
     // S1 开关: Byte 5 的位 4 和位 5
-    data_decoded[4] = (data[5] >> 6) & 0x0003;
+    data_decoded->s2 = (data[5] >> 6) & 0x0003;
 
     // S2 开关: Byte 5 的位 6 和位 7
-    data_decoded[5] = (data[5] >> 4) & 0x0003;
+    data_decoded->s1 = (data[5] >> 4) & 0x0003;
     
     // 注意：data[6] 之后的数据（鼠标、键盘信息）在此函数中被跳过
 }

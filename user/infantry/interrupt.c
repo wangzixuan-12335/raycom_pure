@@ -35,7 +35,7 @@ void USART1_IRQHandler(void) {
         uint16_t rx_len = 18 - DMA_GetCurrDataCounter(DMA2_Stream2);
 
         // 3. 长度校验：只有刚好收到 18 字节才认为是合法的 DBUS 数据包        
-        DBUS_Decode(usart1_raw_data, usart1_data_decoded);
+        DBUS_Decode(usart1_raw_data, &usart1_data_decoded);
 
         // 4. 重置 DMA 计数器并重新开启
         // 必须先置 18，再使能，DMA 才能重新开始从 buf[0] 接收
