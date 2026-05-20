@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-19 23:42:38
+ * @LastEditTime: 2026-05-20 11:06:53
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\main.c
  * @Description: 
  * 
@@ -16,8 +16,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "tasks.h"
-#include "Driver_MyUSART.h"
-#include "Driver_MyDMA.h"
+
 
 
 void main(void) {

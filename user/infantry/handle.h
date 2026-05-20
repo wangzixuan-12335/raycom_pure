@@ -29,6 +29,9 @@
 #include "Driver_Fsm.h"
 #include "Driver_Vofa.h"
 
+#include "Driver_MyUSART.h"
+#include "Driver_MyDMA.h"
+
 #ifdef __HANDLE_GLOBALS
 #define __HANDLE_EXT
 #else
