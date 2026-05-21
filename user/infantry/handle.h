@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-21 20:12:15
+ * @LastEditTime: 2026-05-22 00:45:40
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\handle.h
  * @Description: 
  * 
@@ -43,7 +43,7 @@
 #include "Driver_MyDMA.h"
 #include "Driver_MyServo.h"
 #include "Driver_MyMotor3508.h"
-
+#include "Driver_MyChassis.h"
 
 #ifdef __HANDLE_GLOBALS
 #define __HANDLE_EXT
@@ -60,6 +60,12 @@ __HANDLE_EXT MyMotor_3508_Type Motor_3508_LF;
 __HANDLE_EXT MyMotor_3508_Type Motor_3508_RF;
 __HANDLE_EXT MyMotor_3508_Type Motor_3508_LB;
 __HANDLE_EXT MyMotor_3508_Type Motor_3508_RB;
+
+__HANDLE_EXT PID_Type Motor_3508_LF_PID;
+__HANDLE_EXT PID_Type Motor_3508_RF_PID;
+__HANDLE_EXT PID_Type Motor_3508_LB_PID;
+__HANDLE_EXT PID_Type Motor_3508_RB_PID;
+
 //未完成
 
 //夹爪舵机

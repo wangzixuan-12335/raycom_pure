@@ -88,17 +88,19 @@ void CAN1_RX0_IRQHandler(void) {
         switch (rx_message.StdId) {
             case 0x201:
                 // 处理电机 1 数据
-                // rx_message.Data[0]...
+                Motor_decode_data(&Motor_3508_LF,rx_message.Data);
                 break;
             case 0x202:
                 // 处理电机 2 数据
+                Motor_decode_data(&Motor_3508_RF,rx_message.Data);
                 break;
             case 0x203:
                 //电机3
-                Motor_decode_data(&Motor_3508_LF,rx_message.Data);
+                Motor_decode_data(&Motor_3508_LB,rx_message.Data);
                 break;
             case 0x204:
                 //电机4
+                Motor_decode_data(&Motor_3508_RB,rx_message.Data);
                 break;
             default:
                 break;
@@ -119,7 +121,13 @@ extern volatile uint32_t ulHighFrequencyTimerTicks;
 
 void TIM2_IRQHandler(void) {
     if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
-        ulHighFrequencyTimerTicks++;
+        //ulHighFrequencyTimerTicks++;
+        
+        // float output = PID_Calculate(Motor_3508_LF.Motor_PID, usart1_data_decoded.r1y, (float)Motor_3508_LF.Rotor_Speed);
+        // Can_Send(CAN1,0x200,0,0,(int16_t)output,0);
+
+        //SendChassis_ByRPM(CAN1,0x200,0,0,10*usart1_data_decoded.r1y,0);
+
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
         TIM_ClearFlag(TIM2, TIM_FLAG_Update);
     }

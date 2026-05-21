@@ -1,7 +1,6 @@
-#include "stm32f4xx.h"
 #ifndef __MY_USART_H
 #define __MY_USART_H
-
+#include "stm32f4xx.h"
 typedef struct
 {
     int16_t r2x;

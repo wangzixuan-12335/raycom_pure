@@ -51,7 +51,7 @@ void MY_USART_Init(){
     // 3. 设置抢占优先级和子优先级
     // 注意：如果是接视觉或关键传感器，优先级调高点；如果是普通调试，设中等即可
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1; 
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     
     // 4. 使能通道
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
