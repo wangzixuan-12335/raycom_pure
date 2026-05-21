@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-21 01:43:29
+ * @LastEditTime: 2026-05-21 20:34:50
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\main.c
  * @Description: 
  * 

@@ -76,7 +76,37 @@ void UART8_IRQHandler(void) {
 
 // CAN1数据接收中断服务函数
 void CAN1_RX0_IRQHandler(void) {
-    Bridge_Receive_CAN(&BridgeData, CAN1_BRIDGE);
+    //Bridge_Receive_CAN(&BridgeData, CAN1_BRIDGE);
+    CanRxMsg rx_message;
+
+    // 检查是否收到数据
+    if (CAN_GetITStatus(CAN1, CAN_IT_FMP0) != RESET) {
+        // 读取接收到的数据
+        CAN_Receive(CAN1, CAN_FIFO0, &rx_message);
+
+        // 根据 ID 进行处理
+        switch (rx_message.StdId) {
+            case 0x201:
+                // 处理电机 1 数据
+                // rx_message.Data[0]...
+                break;
+            case 0x202:
+                // 处理电机 2 数据
+                break;
+            case 0x203:
+                //电机3
+                Motor_decode_data(&Motor_3508_LF,rx_message.Data);
+                break;
+            case 0x204:
+                //电机4
+                break;
+            default:
+                break;
+        }
+        
+        // 清除中断标志位
+        CAN_ClearITPendingBit(CAN1, CAN_IT_FMP0);
+    }
 }
 
 // CAN2数据接收中断服务函数
