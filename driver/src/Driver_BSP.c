@@ -693,20 +693,20 @@ void BSP_IMU_Init(void) {
 
 void BSP_TIM2_Init(void) {
     // GPIO
-    GPIO_InitTypeDef GPIO_InitStructure;
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-    GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_TIM2); // GPIOA1复用为定时器2
-    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_1;             // GPIOA1
-    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;           //复用功能
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;      //速度100MHz
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;          //推挽复用输出
-    GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;           //上拉
-    GPIO_Init(GPIOA, &GPIO_InitStructure);                  //初始化
+    // GPIO_InitTypeDef GPIO_InitStructure;
+    // RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+    // GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_TIM2); // GPIOA1复用为定时器2
+    // GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_1;             // GPIOA1
+    // GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;           //复用功能
+    // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;      //速度100MHz
+    // GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;          //推挽复用输出
+    // GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;           //上拉
+    // GPIO_Init(GPIOA, &GPIO_InitStructure);                  //初始化
     // TIM
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure; // TIM 频率
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-    TIM_TimeBaseInitStructure.TIM_Period        = 20 - 1;
-    TIM_TimeBaseInitStructure.TIM_Prescaler     = 180 - 1;
+    TIM_TimeBaseInitStructure.TIM_Period        = 900 - 1;
+    TIM_TimeBaseInitStructure.TIM_Prescaler     = 100 - 1;
     TIM_TimeBaseInitStructure.TIM_CounterMode   = TIM_CounterMode_Up;
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);
@@ -918,7 +918,8 @@ void BSP_PWM_Init(PWM_Type *PWMx, uint16_t prescaler, uint32_t period, uint16_t 
     TIM_TimeBaseInit(PWMx->TIMx, &TIM_TimeBaseInitStructure);         // 初始化定时器
 
     // TIM_OC
-    TIM_OCInitStructure.TIM_OCMode      = TIM_OCMode_PWM2;        // 选择定时器模式:TIM脉冲宽度调制模式2
+    
+    TIM_OCInitStructure.TIM_OCMode      = TIM_OCMode_PWM1;        // 选择定时器模式:TIM脉冲宽度调制模式2
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; // 比较输出使能
     TIM_OCInitStructure.TIM_OCPolarity  = polarity;               // 输出极性:TIM输出比较极性低
     TIM_OCInitStructure.TIM_Pulse       = 5;                      // Pulse
