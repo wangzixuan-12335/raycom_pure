@@ -41,6 +41,7 @@
 
 #include "Driver_MyUSART.h"
 #include "Driver_MyDMA.h"
+#include "Driver_MyServo.h"
 
 #ifdef __HANDLE_GLOBALS
 #define __HANDLE_EXT
@@ -51,6 +52,12 @@
 //遥控器
 __HANDLE_EXT uint8_t usart1_raw_data[18];
 __HANDLE_EXT usart1_data_decoded_type usart1_data_decoded;
+
+//电机结构体
+//未完成
+
+//夹爪舵机
+__HANDLE_EXT PWM_Type PWM_Holding_Jaw_Servo;
 
 // Stone Id
 __HANDLE_EXT uint8_t Board_Id, Robot_Id;
