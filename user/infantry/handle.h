@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-20 20:17:16
+ * @LastEditTime: 2026-05-21 20:12:15
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\handle.h
  * @Description: 
  * 
@@ -42,6 +42,8 @@
 #include "Driver_MyUSART.h"
 #include "Driver_MyDMA.h"
 #include "Driver_MyServo.h"
+#include "Driver_MyMotor3508.h"
+
 
 #ifdef __HANDLE_GLOBALS
 #define __HANDLE_EXT
@@ -54,6 +56,10 @@ __HANDLE_EXT uint8_t usart1_raw_data[18];
 __HANDLE_EXT usart1_data_decoded_type usart1_data_decoded;
 
 //电机结构体
+__HANDLE_EXT MyMotor_3508_Type Motor_3508_LF;
+__HANDLE_EXT MyMotor_3508_Type Motor_3508_RF;
+__HANDLE_EXT MyMotor_3508_Type Motor_3508_LB;
+__HANDLE_EXT MyMotor_3508_Type Motor_3508_RB;
 //未完成
 
 //夹爪舵机
