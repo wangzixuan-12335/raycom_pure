@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 22:39:25
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-20 20:19:54
+ * @LastEditTime: 2026-05-22 20:56:13
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\driver\src\Driver_MyUSART.c
  * @Description: 
  * 
@@ -74,10 +74,10 @@ void DBUS_Decode(uint8_t *data, usart1_data_decoded_type *data_decoded)
     data_decoded->r1y = ((((uint16_t)data[4] >> 1) | ((uint16_t)data[5] << 7)) & 0x07FF)-1024;
 
     // S1 开关: Byte 5 的位 4 和位 5
-    data_decoded->s2 = (data[5] >> 6) & 0x0003;
+    data_decoded->s1 = (data[5] >> 6) & 0x0003;
 
     // S2 开关: Byte 5 的位 6 和位 7
-    data_decoded->s1 = (data[5] >> 4) & 0x0003;
+    data_decoded->s2 = (data[5] >> 4) & 0x0003;
     
     // 注意：data[6] 之后的数据（鼠标、键盘信息）在此函数中被跳过
 }

@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-22 01:01:40
+ * @LastEditTime: 2026-05-23 00:06:53
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\main.c
  * @Description: 
  * 
@@ -36,6 +36,11 @@ void main(void) {
     BSP_PWM_Set_Port(&PWM_Holding_Jaw_Servo,PWM_PD12);
     BSP_PWM_Init(&PWM_Holding_Jaw_Servo,1800,1000,TIM_OCPolarity_High);
 
+    //初始化电机结构体
+    Motor_3508_Init(&Motor_3508_LF,IsPositive_True,19);
+    Motor_3508_Init(&Motor_3508_RF,IsPositive_False,19);
+    Motor_3508_Init(&Motor_3508_LB,IsPositive_True,19);
+    Motor_3508_Init(&Motor_3508_RB,IsPositive_False,19);
     //将PID_Type的变量指针赋值给电机结构体
     Motor_3508_LF.Motor_PID=&Motor_3508_LF_PID;
     Motor_3508_RF.Motor_PID=&Motor_3508_RF_PID;
@@ -46,17 +51,22 @@ void main(void) {
     PID_Init(Motor_3508_RF.Motor_PID,7.5,0.1,0.5,10000,3000);
     PID_Init(Motor_3508_LB.Motor_PID,7.5,0.1,0.5,10000,3000);
     PID_Init(Motor_3508_RB.Motor_PID,7.5,0.1,0.5,10000,3000);
-    
+    //电机结构体合集
+    MyMotor_3508_Collection.LF=&Motor_3508_LF;
+    MyMotor_3508_Collection.RF=&Motor_3508_RF;
+    MyMotor_3508_Collection.LB=&Motor_3508_LB;
+    MyMotor_3508_Collection.RB=&Motor_3508_RB;
+
     //初始化TIM2，生成一个1KHZ的中断
     //BSP_TIM2_Init经过修改，改了分频器，GPIOA初始化被注释
     BSP_TIM2_Init();
 
     //改变夹爪舵机角度
-    //My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,90);
+    //My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,180);
     
     while (1)
     {
-        
+		
     }
     
 }
