@@ -3,12 +3,12 @@
 #include "stm32f4xx.h"
 typedef struct
 {
-    int16_t r2x;
-    int16_t r2y;
     int16_t r1x;
     int16_t r1y;
-    int16_t s2;
+    int16_t r2x;
+    int16_t r2y;
     int16_t s1;
+    int16_t s2;
 }usart1_data_decoded_type;
 
 

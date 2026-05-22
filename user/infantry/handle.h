@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-22 00:45:40
+ * @LastEditTime: 2026-05-22 22:36:56
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\handle.h
  * @Description: 
  * 
@@ -51,6 +51,8 @@
 #define __HANDLE_EXT extern
 #endif
 
+
+
 //遥控器
 __HANDLE_EXT uint8_t usart1_raw_data[18];
 __HANDLE_EXT usart1_data_decoded_type usart1_data_decoded;
@@ -61,12 +63,14 @@ __HANDLE_EXT MyMotor_3508_Type Motor_3508_RF;
 __HANDLE_EXT MyMotor_3508_Type Motor_3508_LB;
 __HANDLE_EXT MyMotor_3508_Type Motor_3508_RB;
 
+//PID结构体
 __HANDLE_EXT PID_Type Motor_3508_LF_PID;
 __HANDLE_EXT PID_Type Motor_3508_RF_PID;
 __HANDLE_EXT PID_Type Motor_3508_LB_PID;
 __HANDLE_EXT PID_Type Motor_3508_RB_PID;
 
-//未完成
+//电机结构体集合
+__HANDLE_EXT MyMotor_3508_Type_Collection MyMotor_3508_Collection;
 
 //夹爪舵机
 __HANDLE_EXT PWM_Type PWM_Holding_Jaw_Servo;

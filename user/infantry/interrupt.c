@@ -122,12 +122,15 @@ extern volatile uint32_t ulHighFrequencyTimerTicks;
 void TIM2_IRQHandler(void) {
     if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
         //ulHighFrequencyTimerTicks++;
+
+        //底盘测试
+        //后期要加上死区
+        //SendChassis_ByRPM(&MyMotor_3508_Collection,CAN1,0x200,0,usart1_data_decoded.r1y,0,0);
+        //Chassis_Calculate(&MyMotor_3508_Collection,CAN1,0x200,(float)usart1_data_decoded.r1y/1000.0f,(float)usart1_data_decoded.r1x/1000.0f,(float)usart1_data_decoded.r2x/330.0f,Chassis_L,Chassis_W);
         
-        // float output = PID_Calculate(Motor_3508_LF.Motor_PID, usart1_data_decoded.r1y, (float)Motor_3508_LF.Rotor_Speed);
-        // Can_Send(CAN1,0x200,0,0,(int16_t)output,0);
-
-        SendChassis_ByRPM(CAN1,0x200,0,0,10*usart1_data_decoded.r1y,0);
-
+        //舵机控制
+        //SetServoByController(usart1_data_decoded.s1);
+        
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
         TIM_ClearFlag(TIM2, TIM_FLAG_Update);
     }
