@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-22 22:36:56
+ * @LastEditTime: 2026-05-23 15:09:53
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\handle.h
  * @Description: 
  * 
@@ -50,7 +50,6 @@
 #else
 #define __HANDLE_EXT extern
 #endif
-
 
 
 //遥控器

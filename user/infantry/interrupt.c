@@ -82,25 +82,28 @@ void CAN1_RX0_IRQHandler(void) {
     // 检查是否收到数据
     if (CAN_GetITStatus(CAN1, CAN_IT_FMP0) != RESET) {
         // 读取接收到的数据
-        CAN_Receive(CAN1, CAN_FIFO0, &rx_message);
-
+        CAN_Receive(CAN1, CAN_FIFO0, &rx_message); 
         // 根据 ID 进行处理
         switch (rx_message.StdId) {
             case 0x201:
                 // 处理电机 1 数据
                 Motor_decode_data(&Motor_3508_LF,rx_message.Data);
+                //Update_3508_Continuous_Angle(&Motor_3508_LF);
                 break;
             case 0x202:
                 // 处理电机 2 数据
                 Motor_decode_data(&Motor_3508_RF,rx_message.Data);
+                //Update_3508_Continuous_Angle(&Motor_3508_RF);
                 break;
             case 0x203:
                 //电机3
                 Motor_decode_data(&Motor_3508_LB,rx_message.Data);
+                //Update_3508_Continuous_Angle(&Motor_3508_LB);
                 break;
             case 0x204:
                 //电机4
                 Motor_decode_data(&Motor_3508_RB,rx_message.Data);
+                //Update_3508_Continuous_Angle(&Motor_3508_RB);
                 break;
             default:
                 break;
@@ -125,11 +128,11 @@ void TIM2_IRQHandler(void) {
 
         //底盘测试
         //后期要加上死区
-        //SendChassis_ByRPM(&MyMotor_3508_Collection,CAN1,0x200,0,usart1_data_decoded.r1y,0,0);
-        //Chassis_Calculate(&MyMotor_3508_Collection,CAN1,0x200,(float)usart1_data_decoded.r1y/1000.0f,(float)usart1_data_decoded.r1x/1000.0f,(float)usart1_data_decoded.r2x/330.0f,Chassis_L,Chassis_W);
+        //SendChassis_ByRPM(&MyMotor_3508_Collection,CAN1,0x200,usart1_data_decoded.r1y/50,0,0,0);
+        Chassis_Calculate(&MyMotor_3508_Collection,CAN1,0x200,(float)usart1_data_decoded.r1y/1000.0f,(float)usart1_data_decoded.r1x/1000.0f,(float)usart1_data_decoded.r2x/330.0f,Chassis_L,Chassis_W);
         
         //舵机控制
-        //SetServoByController(usart1_data_decoded.s1);
+        SetServoByController(usart1_data_decoded.s1);
         
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
         TIM_ClearFlag(TIM2, TIM_FLAG_Update);
