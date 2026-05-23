@@ -105,6 +105,10 @@ void CAN1_RX0_IRQHandler(void) {
                 Motor_decode_data(&Motor_3508_RB,rx_message.Data);
                 //Update_3508_Continuous_Angle(&Motor_3508_RB);
                 break;
+            case 0x205:
+                Motor_decode_data(&Motor_3508_Gantry_Crane_X1,rx_message.Data);
+                Update_3508_Continuous_Angle(&Motor_3508_Gantry_Crane_X1);
+                break;
             default:
                 break;
         }
@@ -129,11 +133,17 @@ void TIM2_IRQHandler(void) {
         //底盘测试
         //后期要加上死区
         //SendChassis_ByRPM(&MyMotor_3508_Collection,CAN1,0x200,usart1_data_decoded.r1y/50,0,0,0);
-        Chassis_Calculate(&MyMotor_3508_Collection,CAN1,0x200,(float)usart1_data_decoded.r1y/1000.0f,(float)usart1_data_decoded.r1x/1000.0f,(float)usart1_data_decoded.r2x/330.0f,Chassis_L,Chassis_W);
+        //Chassis_Calculate(&MyMotor_3508_Collection,CAN1,0x200,(float)usart1_data_decoded.r1y/1000.0f,(float)usart1_data_decoded.r1x/1000.0f,(float)usart1_data_decoded.r2x/330.0f,Chassis_L,Chassis_W);
         
-        //舵机控制
-        SetServoByController(usart1_data_decoded.s1);
+        //龙门架测试
+        //SendCrane_ByRPM(&Motor_3508_Gantry_Crane_Collection,CAN1,0x1FF,usart1_data_decoded.r1y/50,0,0);
         
+        //舵机控制测试
+        //SetServoByController(usart1_data_decoded.s1);
+        
+        //遥控器函数
+        MyController(&usart1_data_decoded);
+
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
         TIM_ClearFlag(TIM2, TIM_FLAG_Update);
     }
