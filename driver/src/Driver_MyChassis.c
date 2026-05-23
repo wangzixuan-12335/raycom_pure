@@ -25,10 +25,10 @@ int16_t Velocity2RPM(float v,float r){
  */
 void SendChassis_ByRPM(MyMotor_3508_Type_Collection *motor_collect,CAN_TypeDef *CANx, int16_t id, int16_t i_201, int16_t i_202, int16_t i_203, int16_t i_204){
     //计算考虑正反转和减速比
-    float output_LF = PID_Calculate(Motor_3508_LF.Motor_PID, i_201*motor_collect->LF->ReductionRatio*motor_collect->LF->IsPositive, (float)Motor_3508_LF.Rotor_Speed);
-    float output_RF = PID_Calculate(Motor_3508_RF.Motor_PID, i_202*motor_collect->RF->ReductionRatio*motor_collect->RF->IsPositive, (float)Motor_3508_RF.Rotor_Speed);
-    float output_LB = PID_Calculate(Motor_3508_LB.Motor_PID, i_203*motor_collect->LB->ReductionRatio*motor_collect->LB->IsPositive, (float)Motor_3508_LB.Rotor_Speed);
-    float output_RB = PID_Calculate(Motor_3508_RB.Motor_PID, i_204*motor_collect->RB->ReductionRatio*motor_collect->RB->IsPositive, (float)Motor_3508_RB.Rotor_Speed);
+    float output_LF = PID_Calculate(motor_collect->LF->Motor_PID, i_201*motor_collect->LF->ReductionRatio*motor_collect->LF->IsPositive, (float)motor_collect->LF->Rotor_Speed);
+    float output_RF = PID_Calculate(motor_collect->RF->Motor_PID, i_202*motor_collect->RF->ReductionRatio*motor_collect->RF->IsPositive, (float)motor_collect->RF->Rotor_Speed);
+    float output_LB = PID_Calculate(motor_collect->LB->Motor_PID, i_203*motor_collect->LB->ReductionRatio*motor_collect->LB->IsPositive, (float)motor_collect->LB->Rotor_Speed);
+    float output_RB = PID_Calculate(motor_collect->RB->Motor_PID, i_204*motor_collect->RB->ReductionRatio*motor_collect->RB->IsPositive, (float)motor_collect->RB->Rotor_Speed);
     Can_Send(CANx,id,(int16_t)output_LF,(int16_t)output_RF,(int16_t)output_LB,(int16_t)output_RB);
 }
 

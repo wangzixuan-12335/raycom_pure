@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-23 16:45:11
+ * @LastEditTime: 2026-05-23 22:42:40
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\main.c
  * @Description: 
  * 
@@ -31,26 +31,45 @@ void main(void) {
     BSP_PWM_Set_Port(&PWM_Holding_Jaw_Servo,PWM_PD12);
     BSP_PWM_Init(&PWM_Holding_Jaw_Servo,1800,1000,TIM_OCPolarity_High);
 
-    //初始化电机结构体
+    //初始化底盘电机结构体
     Motor_3508_Init(&Motor_3508_LF,IsPositive_True,19);
     Motor_3508_Init(&Motor_3508_RF,IsPositive_False,19);
     Motor_3508_Init(&Motor_3508_LB,IsPositive_True,19);
     Motor_3508_Init(&Motor_3508_RB,IsPositive_False,19);
-    //将PID_Type的变量指针赋值给电机结构体
+    //初始化龙门架电机结构体
+    Motor_3508_Init(&Motor_3508_Gantry_Crane_X1,IsPositive_True,19);
+    Motor_3508_Init(&Motor_3508_Gantry_Crane_Y1,IsPositive_True,19);
+    Motor_3508_Init(&Motor_3508_Gantry_Crane_Y2,IsPositive_True,19);
+
+    //将PID_Type的变量指针赋值给底盘电机结构体
     Motor_3508_LF.Motor_PID=&Motor_3508_LF_PID;
     Motor_3508_RF.Motor_PID=&Motor_3508_RF_PID;
     Motor_3508_LB.Motor_PID=&Motor_3508_LB_PID;
     Motor_3508_RB.Motor_PID=&Motor_3508_RB_PID;
-    //初始化MOTOR3508的pid
+    //将PID_Type的变量指针赋值给龙门架电机结构体
+    Motor_3508_Gantry_Crane_X1.Motor_PID=&Motor_3508_Gantry_Crane_X1_PID;
+    Motor_3508_Gantry_Crane_Y1.Motor_PID=&Motor_3508_Gantry_Crane_Y1_PID;
+    Motor_3508_Gantry_Crane_Y2.Motor_PID=&Motor_3508_Gantry_Crane_Y2_PID;
+
+    //初始化底盘MOTOR3508的pid
     PID_Init(Motor_3508_LF.Motor_PID,7.5,0.1,0.5,10000,3000);
     PID_Init(Motor_3508_RF.Motor_PID,7.5,0.1,0.5,10000,3000);
     PID_Init(Motor_3508_LB.Motor_PID,7.5,0.1,0.5,10000,3000);
     PID_Init(Motor_3508_RB.Motor_PID,7.5,0.1,0.5,10000,3000);
-    //电机结构体合集
+    //初始化龙门架MOTOR3508的pid
+    PID_Init(Motor_3508_Gantry_Crane_X1.Motor_PID,7.5,0.1,0.5,10000,3000);
+    PID_Init(Motor_3508_Gantry_Crane_Y1.Motor_PID,7.5,0.1,0.5,10000,3000);
+    PID_Init(Motor_3508_Gantry_Crane_Y2.Motor_PID,7.5,0.1,0.5,10000,3000);
+    
+    //底盘电机结构体合集
     MyMotor_3508_Collection.LF=&Motor_3508_LF;
     MyMotor_3508_Collection.RF=&Motor_3508_RF;
     MyMotor_3508_Collection.LB=&Motor_3508_LB;
     MyMotor_3508_Collection.RB=&Motor_3508_RB;
+    //龙门架电机结构体合集
+    Motor_3508_Gantry_Crane_Collection.CRANE_X1=&Motor_3508_Gantry_Crane_X1;
+    Motor_3508_Gantry_Crane_Collection.CRANE_Y1=&Motor_3508_Gantry_Crane_Y1;
+    Motor_3508_Gantry_Crane_Collection.CRANE_Y2=&Motor_3508_Gantry_Crane_Y2;
 
     //初始化CAN通信
     //CAN接收写在CAN1中断内，根据不同报文头将数据写到结构体(eg)Motor_3508_LF中
