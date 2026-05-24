@@ -18,60 +18,119 @@ void SendCrane_ByRPM(MyMotor_3508_Crane_Type_Collection *motor_collect,CAN_TypeD
     Can_Send(CANx,id,(int16_t)output_X1,(int16_t)output_Y1,(int16_t)output_Y2,(int16_t)0);
 }
 
-// 静态全局变量或结构体成员，用于保存上一次的斜坡速度值
-static float ramp_speed = 0.0f;
 
-//测试！！！
-void  Crane_Control_Loop(MyMotor_3508_Crane_Type_Collection *motor_collect, int16_t rc_val)
+/**
+ * @description: 混合位置环与速度斜坡环的龙门架电机控制
+ * @param {MyMotor_3508_Type} *motor
+ * @param {int16_t} rc_val          遥控器值
+ * @param {int64_t} max_position    位置最大值
+ * @param {int64_t} min_position    位置最小值
+ * @param {float} motor_speed_up    匀速上升RPM
+ * @param {float} motor_speed_down  匀速下降RPM
+ * @param {float} ramp_acc_step     斜坡加速步长
+ * @param {float} ramp_dec_step     斜坡减速步长
+ * @return {int16_t} final_speed_cmd 最终速度RPM
+ */
+int16_t Crane_Control_Loop(MyMotor_3508_Type *motor, int16_t rc_val, 
+    int64_t max_position, int64_t min_position, 
+    float motor_speed_up, float motor_speed_down,
+    float ramp_acc_step, float ramp_dec_step)
 {
-    float final_target_speed = 0.0f; // 遥控器最终想要的终点速度
+    float final_speed_cmd = 0.0f; // 最终给到 SendCrane_ByRPM 的速度期望
+    int32_t current_ecd = motor->total_ecd; // 当前绝对位置
+
+    // ================== 1. 状态与模式切换状态机 ==================
     
-    // 1. 基础解析：获取遥控器的原始期望目标
-    if (rc_val > 100) {
-        final_target_speed = MOTOR_SPEED_UP;   // 最终想要匀速上升
-    } 
-    else if (rc_val < -100) {
-        final_target_speed = MOTOR_SPEED_DOWN; // 最终想要匀速下降
-    } 
-    else {
-        final_target_speed = 0.0f;             // 最终想要悬停
-    }
-    
-    // 2. 核心：无脑单向限位拦截（直接扼杀终点期望）
-    if (motor_collect->CRANE_X1->total_ecd >= LIFT_MAX_POS && final_target_speed > 0) {
-        final_target_speed = 0.0f; 
-        motor_collect->CRANE_X1->Motor_PID->output_I = 0.0f; // 清空积分
-    }
-    if (motor_collect->CRANE_X1->total_ecd <= LIFT_MIN_POS && final_target_speed < 0) {
-        final_target_speed = 0.0f; 
-        motor_collect->CRANE_X1->Motor_PID->output_I = 0.0f; // 清空积分
-    }
-    
-    // 3. 【核心进化】：斜坡函数加减速过渡
-    // 如果当前斜坡速度还没达到遥控器的目标速度，则按照步长递增/递减
-    if (ramp_speed < final_target_speed) 
+    // 【情况 A】：检测到越界（触顶或触底），强制进入位置抱死模式
+    // 减去50防止反复纠偏
+    if (current_ecd >= max_position-50 && rc_val > 100) 
     {
-        ramp_speed += RAMP_ACC_STEP;
-        if (ramp_speed > final_target_speed) {
-            ramp_speed = final_target_speed; // 防止溢出越界
+        motor->crane_mode = MODE_POSITION_HOLD;
+        motor->target_pos = max_position; // 强制锁死在上限
+    }
+    // 加上50防止反复纠偏
+    else if (current_ecd <= min_position+50 && rc_val < -100) 
+    {
+        motor->crane_mode = MODE_POSITION_HOLD;
+        motor->target_pos = min_position; // 强制锁死在下限
+    }
+    // 【情况 B】：遥控器推出去，且未越界，进入正常的匀速赶路模式
+    else if (rc_val > 100 || rc_val < -100) 
+    {
+        motor->crane_mode = MODE_SPEED_RAMP;
+    }
+    // 【情况 C】：遥控器回中（想要悬停）
+    else 
+    {
+        // 关键：只有从赶路模式刚停下来的一瞬间，才捕捉一次位置，防止重复刷新
+        if (motor->crane_mode == MODE_SPEED_RAMP) 
+        {
+            motor->target_pos = current_ecd; // 锁死当前这一帧的绝对位置
         }
-    } 
-    else if (ramp_speed > final_target_speed) 
+        motor->crane_mode = MODE_POSITION_HOLD;
+    }
+
+    // ================== 2. 根据不同模式计算期望速度 ==================
+    
+    if (motor->crane_mode == MODE_SPEED_RAMP) 
     {
-        ramp_speed -= RAMP_DEC_STEP;
-        if (ramp_speed < final_target_speed) {
-            ramp_speed = final_target_speed; // 防止越界
+        // ------ 速度斜坡模式 ------
+        float final_target_speed = (rc_val > 100) ? motor_speed_up : motor_speed_down;
+        
+        // 斜坡函数过渡（加速步长2，减速步长4）
+        if (motor->ramp_speed < final_target_speed) {
+            motor->ramp_speed += ramp_acc_step;
+            if (motor->ramp_speed > final_target_speed) motor->ramp_speed = final_target_speed;
+        } 
+        else if (motor->ramp_speed > final_target_speed) {
+            motor->ramp_speed -= ramp_dec_step;
+            if (motor->ramp_speed < final_target_speed) motor->ramp_speed = final_target_speed;
+        }
+        
+        final_speed_cmd = motor->ramp_speed;
+    } 
+    else 
+    {
+        // ------ 位置抱死模式（悬停/MIN/MAX） ------
+        motor->ramp_speed = 0.0f; // 清空速度斜坡的历史值
+        
+        // 位置外环计算：输入目标位置和当前位置，输出“为了纠偏应该达到的目标速度”
+        // 注意：位置外环 pid_position 的参数通常只需要 P，千万不要给 I
+        final_speed_cmd = PID_Calculate(motor->Motor_Position_PID, (float)motor->target_pos, (float)current_ecd);
+        
+        // 限制位置外环输出的最大速度，防止纠偏时猛烈暴冲（限制在 100 rpm 左右即可）
+        if (final_speed_cmd > 100.0f)  final_speed_cmd = 100.0f;
+        if (final_speed_cmd < -100.0f) final_speed_cmd = -100.0f;
+
+        // 增加死区：如果误差很小，直接停止纠偏，防止在目标点附近反复微调导致抽搐
+        if (abs(motor->target_pos - current_ecd) < 50) {
+            final_speed_cmd = 0.0f;
         }
     }
 
-    // 4. 安全保护：如果龙门架已经在极限位置，且斜坡惯性还没降为0，为了绝对安全强制刹死
-    if (motor_collect->CRANE_X1->total_ecd >= LIFT_MAX_POS && ramp_speed > 0) {
-        ramp_speed = 0.0f;
+    // 3. 积分清零（消除抽搐特效药）：
+    // 当处于位置抱死模式时，如果位置误差已经很小，或者在限位处，强制清零速度环积分
+    // 避免积分项在临界点累积导致的高频抖动
+    if (motor->crane_mode == MODE_POSITION_HOLD) {
+        if (motor->Motor_PID != NULL) {
+            motor->Motor_PID->output_I = 0.0f;
+        }
     }
-    if (motor_collect->CRANE_X1->total_ecd <= LIFT_MIN_POS && ramp_speed < 0) {
-        ramp_speed = 0.0f;
-    }
-    
-    // 5. 将通过斜坡规划、如丝般顺滑的 ramp_speed 送给底层执行函数
-    SendCrane_ByRPM(motor_collect, CAN1, 0x1FF, ramp_speed, 0.0f, 0.0f);
+
+    return (int16_t)final_speed_cmd;
+}
+
+/**
+ * @description: 
+ * @param {MyMotor_3508_Crane_Type_Collection} *motor_collect
+ * @param {int16_t} rc_val1 遥控器值1
+ * @param {int16_t} rc_val2 遥控器值2
+ * @param {int16_t} rc_val3 遥控器值3
+ * @return {*}
+ */
+void Crane_Calculate(MyMotor_3508_Crane_Type_Collection *motor_collect,int16_t rc_val1,int16_t rc_val2,int16_t rc_val3){
+    int16_t output_X1=Crane_Control_Loop(motor_collect->CRANE_X1,rc_val1,240000,0,100.0,-100.0,2.0,4.0);
+    int16_t output_Y1=0;
+    int16_t output_Y2=0;
+    SendCrane_ByRPM(motor_collect,CAN1,0x1FF,output_X1,output_Y1,output_Y2);
 }

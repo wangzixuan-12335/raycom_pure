@@ -74,10 +74,17 @@ __HANDLE_EXT PID_Type Motor_3508_LF_PID;
 __HANDLE_EXT PID_Type Motor_3508_RF_PID;
 __HANDLE_EXT PID_Type Motor_3508_LB_PID;
 __HANDLE_EXT PID_Type Motor_3508_RB_PID;
+__HANDLE_EXT PID_Type Motor_3508_LF_Position_PID;
+__HANDLE_EXT PID_Type Motor_3508_RF_Position_PID;
+__HANDLE_EXT PID_Type Motor_3508_LB_Position_PID;
+__HANDLE_EXT PID_Type Motor_3508_RB_Position_PID;
 
 __HANDLE_EXT PID_Type Motor_3508_Gantry_Crane_X1_PID;
 __HANDLE_EXT PID_Type Motor_3508_Gantry_Crane_Y1_PID;
 __HANDLE_EXT PID_Type Motor_3508_Gantry_Crane_Y2_PID;
+__HANDLE_EXT PID_Type Motor_3508_Gantry_Crane_X1_Position_PID;
+__HANDLE_EXT PID_Type Motor_3508_Gantry_Crane_Y1_Position_PID;
+__HANDLE_EXT PID_Type Motor_3508_Gantry_Crane_Y2_Position_PID;
 
 //电机结构体集合
 __HANDLE_EXT MyMotor_3508_Type_Collection MyMotor_3508_Collection;
