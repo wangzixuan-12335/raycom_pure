@@ -1,5 +1,5 @@
 #include "stm32f4xx.h"
-#include "Driver_MyMotor3508.h"
+#include "handle.h"
 
 /**
  * @description: CAN解码
@@ -22,11 +22,13 @@ void Motor_decode_data(MyMotor_3508_Type *motor, uint8_t *rx_data){
 /**
  * @description: 初始化电机结构体
  * @param {MyMotor_3508_Type} *motor
- * @param {int8_t} IsPositive           //是否正转
- * @param {uint8_t} ReductionRatio      //减速比
+ * @param {int8_t} IsPositive           是否正转
+ * @param {uint8_t} ReductionRatio      减速比
+ * @param {PID_Type} *speed_PID          速度环PID
+ * @param {PID_Type} *position_PID       位置环环PID
  * @return {*}
  */
-void Motor_3508_Init(MyMotor_3508_Type *motor,int8_t IsPositive,uint8_t ReductionRatio){
+void Motor_3508_Init(MyMotor_3508_Type *motor,int8_t IsPositive,uint8_t ReductionRatio,PID_Type *speed_PID,PID_Type *position_PID){
     motor->IsPositive=IsPositive;
     motor->ReductionRatio=ReductionRatio;
     motor->IsActive=0;
@@ -37,6 +39,11 @@ void Motor_3508_Init(MyMotor_3508_Type *motor,int8_t IsPositive,uint8_t Reductio
     motor->total_ecd=0;
     motor->Rotor_Speed=0;
     motor->Actual_Torque_Current=0;
+    motor->Motor_PID=speed_PID;
+    motor->Motor_Position_PID=position_PID;
+    motor->crane_mode=MODE_POSITION_HOLD;
+    motor->target_pos=0;
+    motor->ramp_speed=0.0f;
 }
 
 /**

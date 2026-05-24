@@ -1,20 +1,17 @@
-/*
- * @Author: Zixuan Wang tanng@163.com
- * @Date: 2026-05-21 19:44:38
- * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-23 16:28:21
- * @FilePath: \mdkd:\Desktop\电控\raycom_pure\driver\inc\Driver_MyMotor3508.h
- * @Description: 
- * 
- * Copyright (c) 2026 by ${git_name_email}, All Rights Reserved. 
- */
 #ifndef __MY_MOTOR_3508
 #define __MY_MOTOR_3508
 
 #include "stm32f4xx.h"
 #include "Driver_PID.h"
+
 #define IsPositive_True 1
 #define IsPositive_False -1
+
+//龙门架控制模式枚举
+typedef enum {
+    MODE_SPEED_RAMP = 0, // 赶路模式：速度斜坡环
+    MODE_POSITION_HOLD   // 抱死模式：位置外环 + 速度内环
+} Crane_Mode_e;
 
 typedef __packed struct {
     uint8_t IsActive;              //电机是否激活，未接收CAN即未激活
@@ -30,12 +27,17 @@ typedef __packed struct {
     int16_t Rotor_Speed;            //转子转速(rpm)
     int16_t Actual_Torque_Current;  //实际转矩电流
     int8_t Motor_Temperature;       //电机温度(摄氏度)
-    PID_Type *Motor_PID;            //电机pid结构体
+    PID_Type *Motor_PID;            //电机速度环pid结构体
+    PID_Type *Motor_Position_PID;    //电机位置环PID
+
+    Crane_Mode_e crane_mode;        //运行模式，赶路模式或抱死模式
+    int64_t target_pos;             //目标位置
+    float ramp_speed;               //斜坡速度
 }MyMotor_3508_Type;
 
 void Motor_decode_data(MyMotor_3508_Type *motor, uint8_t *rx_data);
 
-void Motor_3508_Init(MyMotor_3508_Type *motor,int8_t IsPositive,uint8_t ReductionRatio);
+void Motor_3508_Init(MyMotor_3508_Type *motor,int8_t IsPositive,uint8_t ReductionRatio,PID_Type *speed_PID,PID_Type *position_PID);
 
 void Update_3508_Continuous_Angle(MyMotor_3508_Type *motor);
 
