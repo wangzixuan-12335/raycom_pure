@@ -10,9 +10,17 @@
 
 
 void main(void) {
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    
+    //初始化Delay和I2C
+    My_delay_init();
+    MyI2C_Init();
+
+    //激光测距初始化 
+    TOF_Init();
+    
     //遥控器USART+DMA转运, 
     //USART在中断里面处理解码，解码数据在结构体usart1_data_decoded中
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
     MY_USART_Init();
     MyDMA_Init((uint32_t)&(USART1->DR),(uint32_t)usart1_raw_data,18);
 	
@@ -57,6 +65,7 @@ void main(void) {
     //初始化CAN通信
     //CAN接收写在CAN1中断内，根据不同报文头将数据写到结构体(eg)Motor_3508_LF中
     //CAN发送写在TIM2的定时(1kHZ)的中断中
+    //can发送内有死循环，记得加超时退出
     BSP_CAN_Init();
 
     //初始化TIM2，生成一个1KHZ的中断，主要业务写在这个中断中，要保证所有对象初始化完毕，故应最后开启
@@ -65,10 +74,11 @@ void main(void) {
 
     //改变夹爪舵机角度
     //My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,180);
-    
+
     while (1)
     {
-		
+        //不断读TOF激光测距值
+        TOF_Loop_Read();
     }
     
 }

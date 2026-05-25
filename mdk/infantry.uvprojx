@@ -340,7 +340,7 @@
               <MiscControls>--gnu</MiscControls>
               <Define>STM32F427_437xx,USE_STDPERIPH_DRIVER,ROBOT_LOOP_ONE.__TARGET_FPU_CM4,ARM_MATH_CM4,__CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\core;..\bsp\inc;..\driver\inc;..\library\std\inc;..\user;..\library\freertos\include;..\library\freertos\portable\RVDS\ARM_CM4F;..\user\common;..\library\atom\delay;..\library\atom\sys;..\library\atom\usart;..\library\atom\debug;..\library\mpu6500;..\user\infantry;..\library\vegmath;..\user\common;..\device\inc;..\library\ekf</IncludePath>
+              <IncludePath>..\core;..\bsp\inc;..\driver\inc;..\library\std\inc;..\user;..\library\freertos\include;..\library\freertos\portable\RVDS\ARM_CM4F;..\user\common;..\library\atom\delay;..\library\atom\sys;..\library\atom\usart;..\library\atom\debug;..\library\mpu6500;..\user\infantry;..\library\vegmath;..\user\common;..\device\inc;..\library\ekf;..\library\vl53l1x\core;..\library\vl53l1x\platform</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -534,6 +534,21 @@
               <FileType>1</FileType>
               <FilePath>..\library\ekf\vector3d.c</FilePath>
             </File>
+            <File>
+              <FileName>VL53L1X_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\library\vl53l1x\core\VL53L1X_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>VL53L1X_calibration.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\library\vl53l1x\core\VL53L1X_calibration.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_platform.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\library\vl53l1x\platform\vl53l1_platform.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -623,6 +638,86 @@
               <FileName>Driver_MyDMA.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\driver\inc\Driver_MyDMA.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyServo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\src\Driver_MyServo.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyServo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyServo.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyMotor3508.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MyMotor3508.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyMotor3508.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyMotor3508.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyChassis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MyChassis.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyChassis.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyChassis.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyCrane.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MyCrane.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyCrane.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyCrane.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyController.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MyController.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyController.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyController.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyDelay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MyDelay.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyDelay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyDelay.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyI2C.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MyI2C.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyI2C.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyI2C.h</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyTof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MyTof.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MyTof.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MyTof.h</FilePath>
             </File>
           </Files>
         </Group>
