@@ -6,7 +6,7 @@ void MyController(usart1_data_decoded_type *data){
     {
     case 1:
         //龙门架
-        Crane_Calculate(&Motor_3508_Gantry_Crane_Collection,data->r2y,0,0);
+        Crane_Calculate(&Motor_3508_Gantry_Crane_Collection,data->r2y,data->r1y,data->r1y);
         break;
     case 3:
         //底盘

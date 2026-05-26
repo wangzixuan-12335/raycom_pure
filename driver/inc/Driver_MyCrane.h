@@ -3,6 +3,30 @@
 #include "stm32f4xx.h"
 #include "Driver_MyMotor3508.h"
 
+//X1电机
+#define X1_MAX_POSITION         240000
+#define X1_MIN_POSITION         0
+#define X1_MOTOR_SPEED_UP       100.0f
+#define X1_MOTOR_SPEED_DOWN     -100.0f
+#define X1_RAMP_ACC_STEP        2.0f
+#define X1_RAMP_DEC_STEP        4.0f
+
+//Y1电机
+#define Y1_MAX_POSITION         240000
+#define Y1_MIN_POSITION         0
+#define Y1_MOTOR_SPEED_UP       100.0f
+#define Y1_MOTOR_SPEED_DOWN     -100.0f
+#define Y1_RAMP_ACC_STEP        2.0f
+#define Y1_RAMP_DEC_STEP        4.0f
+
+//Y2电机
+#define Y2_MAX_POSITION         240000
+#define Y2_MIN_POSITION         0
+#define Y2_MOTOR_SPEED_UP       100.0f
+#define Y2_MOTOR_SPEED_DOWN     -100.0f
+#define Y2_RAMP_ACC_STEP        2.0f
+#define Y2_RAMP_DEC_STEP        4.0f
+
 typedef struct{
     MyMotor_3508_Type *CRANE_X1;
     MyMotor_3508_Type *CRANE_Y1;

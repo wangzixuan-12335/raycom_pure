@@ -11,6 +11,15 @@
 
 void main(void) {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+
+    //初始化上下位机通信,初始化信息结构体
+    BSP_USART2_Init(115200,0);
+    Lower_Computer_Message[0]=0xAA;
+    Lower_Computer_Message[7]=0x0D;
+    Lower_Computer_Message[8]=0x0A;
+    //初始化防止值一开始乱飞
+    distance_x_mm=0;
+    distance_y_mm=0;
     
     //初始化Delay和I2C
     My_delay_init();
@@ -37,7 +46,7 @@ void main(void) {
     //初始化龙门架电机结构体
     Motor_3508_Init(&Motor_3508_Gantry_Crane_X1,IsPositive_True,19,&Motor_3508_Gantry_Crane_X1_PID,&Motor_3508_Gantry_Crane_X1_Position_PID);
     Motor_3508_Init(&Motor_3508_Gantry_Crane_Y1,IsPositive_True,19,&Motor_3508_Gantry_Crane_Y1_PID,&Motor_3508_Gantry_Crane_Y1_Position_PID);
-    Motor_3508_Init(&Motor_3508_Gantry_Crane_Y2,IsPositive_True,19,&Motor_3508_Gantry_Crane_Y2_PID,&Motor_3508_Gantry_Crane_Y2_Position_PID);
+    Motor_3508_Init(&Motor_3508_Gantry_Crane_Y2,IsPositive_False,19,&Motor_3508_Gantry_Crane_Y2_PID,&Motor_3508_Gantry_Crane_Y2_Position_PID);
 
     //初始化底盘MOTOR3508的pid
     PID_Init(Motor_3508_LF.Motor_PID,7.5,0.1,0.5,10000,3000);
@@ -65,7 +74,7 @@ void main(void) {
     //初始化CAN通信
     //CAN接收写在CAN1中断内，根据不同报文头将数据写到结构体(eg)Motor_3508_LF中
     //CAN发送写在TIM2的定时(1kHZ)的中断中
-    //can发送内有死循环，记得加超时退出
+    //can发送内有死循环，记得加超时退出(已修改)
     BSP_CAN_Init();
 
     //初始化TIM2，生成一个1KHZ的中断，主要业务写在这个中断中，要保证所有对象初始化完毕，故应最后开启
@@ -79,6 +88,17 @@ void main(void) {
     {
         //不断读TOF激光测距值
         TOF_Loop_Read();
+
+        Lower_Computer_Message[1]=(uint8_t)(distance_chassis_mm>>8);
+        Lower_Computer_Message[2]=(uint8_t)(distance_chassis_mm & 0xFF);
+
+        Lower_Computer_Message[3]=(uint8_t)(distance_x_mm>>8);
+        Lower_Computer_Message[4]=(uint8_t)(distance_x_mm & 0xFF);
+
+        Lower_Computer_Message[5]=(uint8_t)(distance_y_mm>>8);
+        Lower_Computer_Message[6]=(uint8_t)(distance_y_mm & 0xFF);
+        
+        Serial_SendArray(Lower_Computer_Message,9);
     }
     
 }
