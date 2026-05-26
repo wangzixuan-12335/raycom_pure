@@ -2,7 +2,7 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-19 21:48:45
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-25 18:15:29
+ * @LastEditTime: 2026-05-26 16:03:41
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\user\infantry\handle.h
  * @Description: 
  * 
@@ -49,6 +49,7 @@
 #include "Driver_MyDelay.h"
 #include "Driver_MyI2C.h"
 #include "Driver_MyTof.h"
+#include "Driver_MySerial.h"
 
 #ifdef __HANDLE_GLOBALS
 #define __HANDLE_EXT
@@ -56,8 +57,15 @@
 #define __HANDLE_EXT extern
 #endif
 
-//激光测距
-__HANDLE_EXT uint16_t distance_mm; // 用来存放最终的测距结果（单位：毫米）
+//上下位机通信
+//头:0xAA 尾部:0x0D 0x0A
+__HANDLE_EXT uint8_t Lower_Computer_Message[9];
+
+//物理距离结果
+__HANDLE_EXT uint16_t distance_chassis_mm; // 激光测距结果（单位：毫米）
+__HANDLE_EXT uint16_t distance_x_mm; // 夹爪伸长结果（单位：毫米）
+__HANDLE_EXT uint16_t distance_y_mm; // 夹爪离地结果（单位：毫米）
+
 
 //遥控器
 __HANDLE_EXT uint8_t usart1_raw_data[18];

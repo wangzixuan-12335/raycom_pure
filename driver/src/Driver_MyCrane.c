@@ -3,6 +3,16 @@
 
 
 
+/**
+ * @description: 
+ * @param {MyMotor_3508_Crane_Type_Collection} *motor_collect
+ * @param {CAN_TypeDef} *CANx
+ * @param {int16_t} id
+ * @param {int16_t} i_201   X1电机
+ * @param {int16_t} i_202   Y1电机
+ * @param {int16_t} i_203   Y2电机
+ * @return {*}
+ */
 void SendCrane_ByRPM(MyMotor_3508_Crane_Type_Collection *motor_collect,CAN_TypeDef *CANx, int16_t id, int16_t i_201, int16_t i_202, int16_t i_203){
     //计算考虑正反转和减速比
     float output_X1 = PID_Calculate(motor_collect->CRANE_X1->Motor_PID, 
@@ -123,14 +133,14 @@ int16_t Crane_Control_Loop(MyMotor_3508_Type *motor, int16_t rc_val,
 /**
  * @description: 
  * @param {MyMotor_3508_Crane_Type_Collection} *motor_collect
- * @param {int16_t} rc_val1 遥控器值1
- * @param {int16_t} rc_val2 遥控器值2
- * @param {int16_t} rc_val3 遥控器值3
+ * @param {int16_t} rc_val1 遥控器值1->x1
+ * @param {int16_t} rc_val2 遥控器值2->y1
+ * @param {int16_t} rc_val3 遥控器值3->y2
  * @return {*}
  */
 void Crane_Calculate(MyMotor_3508_Crane_Type_Collection *motor_collect,int16_t rc_val1,int16_t rc_val2,int16_t rc_val3){
-    int16_t output_X1=Crane_Control_Loop(motor_collect->CRANE_X1,rc_val1,240000,0,100.0,-100.0,2.0,4.0);
-    int16_t output_Y1=0;
-    int16_t output_Y2=0;
+    int16_t output_X1=Crane_Control_Loop(motor_collect->CRANE_X1,rc_val1,X1_MAX_POSITION,X1_MIN_POSITION,X1_MOTOR_SPEED_UP,X1_MOTOR_SPEED_DOWN,X1_RAMP_ACC_STEP,X1_RAMP_DEC_STEP);
+    int16_t output_Y1=Crane_Control_Loop(motor_collect->CRANE_Y1,rc_val2,Y1_MAX_POSITION,Y1_MIN_POSITION,Y1_MOTOR_SPEED_UP,Y1_MOTOR_SPEED_DOWN,Y1_RAMP_ACC_STEP,Y1_RAMP_DEC_STEP);
+    int16_t output_Y2=Crane_Control_Loop(motor_collect->CRANE_Y2,rc_val3,Y2_MAX_POSITION,Y2_MIN_POSITION,Y2_MOTOR_SPEED_UP,Y2_MOTOR_SPEED_DOWN,Y2_RAMP_ACC_STEP,Y2_RAMP_DEC_STEP);
     SendCrane_ByRPM(motor_collect,CAN1,0x1FF,output_X1,output_Y1,output_Y2);
 }

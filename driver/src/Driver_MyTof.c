@@ -30,7 +30,7 @@ void TOF_Init(void){
     uint8_t byteData;
     uint8_t sensorState = 0;
     int8_t status = 0;
-    distance_mm = 0; // 用来存放最终的测距结果（单位：毫米）
+    distance_chassis_mm = 0; // 用来存放最终的测距结果（单位：毫米）
     // 【第一步】初始化底层的软件 I2C 引脚
     MyI2C_Init(); 
 
@@ -86,7 +86,7 @@ void TOF_Loop_Read(void){
     if (status == 0 && dataReady == 1) 
     {
         // 读取具体的全标距离（单位：mm）
-        status = VL53L1X_GetDistance(dev_address, &distance_mm);
+        status = VL53L1X_GetDistance(dev_address, &distance_chassis_mm);
         
         //读完数据清除标志位
         status = VL53L1X_ClearInterrupt(dev_address);

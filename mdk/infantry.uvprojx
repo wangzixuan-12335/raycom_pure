@@ -719,6 +719,16 @@
               <FileType>5</FileType>
               <FilePath>..\driver\inc\Driver_MyTof.h</FilePath>
             </File>
+            <File>
+              <FileName>Driver_MySerial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\src\Driver_MySerial.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_MySerial.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\driver\inc\Driver_MySerial.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

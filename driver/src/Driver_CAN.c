@@ -3,6 +3,7 @@
 void Can_Send(CAN_TypeDef *CANx, int16_t id, int16_t i_201, int16_t i_202, int16_t i_203, int16_t i_204) {
     CanTxMsg CanTxData;
     uint8_t  mailBox;
+    uint32_t timeout = 0xFFFF;
 
     if (id <= 0x7ff) {
         CanTxData.StdId = id;
@@ -34,7 +35,8 @@ void Can_Send(CAN_TypeDef *CANx, int16_t id, int16_t i_201, int16_t i_202, int16
 
     mailBox = CAN_Transmit(CANx, &CanTxData);
 
-    while (CAN_TransmitStatus(CANx, mailBox) != CAN_TxStatus_Ok) {
+    while (CAN_TransmitStatus(CANx, mailBox) != CAN_TxStatus_Ok  && timeout > 0) {
+        timeout--;
     }
 }
 
