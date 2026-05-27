@@ -2,13 +2,14 @@
  * @Author: Zixuan Wang tanng@163.com
  * @Date: 2026-05-21 00:49:39
  * @LastEditors: Zixuan Wang tanng@163.com
- * @LastEditTime: 2026-05-25 23:41:13
+ * @LastEditTime: 2026-05-27 16:55:24
  * @FilePath: \mdkd:\Desktop\电控\raycom_pure\device\src\Driver_MyServo.c
  * @Description: 
  * 
  * Copyright (c) 2026 by ${git_name_email}, All Rights Reserved. 
  */
 #include "stm32f4xx.h"
+#include "Driver_MyServo.h"
 #include "handle.h"
 
 
@@ -35,15 +36,15 @@ void SetServoByController(int16_t servo_status){
         {
         case 1:
             //夹住苗
-            My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,0);
+            My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,SEEDLING_ANGLE);
             break;
         case 3:
             //松开
-            My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,90);
+            My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,OPEN_ANGLE);
             break;
         case 2:
             //夹住茎
-            My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,180);
+            My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,STEM_ANGLE);
             break;
         default:
             break;
