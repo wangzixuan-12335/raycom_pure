@@ -89,6 +89,9 @@ void main(void) {
         //不断读TOF激光测距值
         TOF_Loop_Read();
 
+        distance_x_mm=Calculate_Crane_X_distance(&Motor_3508_Gantry_Crane_Collection);
+        distance_y_mm=Calculate_Crane_Y_distance(&Motor_3508_Gantry_Crane_Collection);
+
         Lower_Computer_Message[1]=(uint8_t)(distance_chassis_mm>>8);
         Lower_Computer_Message[2]=(uint8_t)(distance_chassis_mm & 0xFF);
 

@@ -10,6 +10,7 @@
 #define X1_MOTOR_SPEED_DOWN     -100.0f
 #define X1_RAMP_ACC_STEP        2.0f
 #define X1_RAMP_DEC_STEP        4.0f
+#define X1_GEAR_RADIUS_MM       1
 
 //Y1电机
 #define Y1_MAX_POSITION         240000
@@ -18,6 +19,7 @@
 #define Y1_MOTOR_SPEED_DOWN     -100.0f
 #define Y1_RAMP_ACC_STEP        2.0f
 #define Y1_RAMP_DEC_STEP        4.0f
+#define Y1_GEAR_RADIUS_MM       1
 
 //Y2电机
 #define Y2_MAX_POSITION         240000
@@ -26,6 +28,10 @@
 #define Y2_MOTOR_SPEED_DOWN     -100.0f
 #define Y2_RAMP_ACC_STEP        2.0f
 #define Y2_RAMP_DEC_STEP        4.0f
+#define Y2_GEAR_RADIUS_MM       1
+
+//夹爪离地高度
+#define GRIPPER2GROUND_DISTANCE_MM 0 
 
 typedef struct{
     MyMotor_3508_Type *CRANE_X1;
@@ -41,5 +47,9 @@ int16_t Crane_Control_Loop(MyMotor_3508_Type *motor, int16_t rc_val,
     float ramp_acc_step, float ramp_dec_step);
 
 void Crane_Calculate(MyMotor_3508_Crane_Type_Collection *motor_collect,int16_t rc_val1,int16_t rc_val2,int16_t rc_val3);
+
+int16_t Calculate_Crane_X_distance(MyMotor_3508_Crane_Type_Collection *motor_collect);
+
+int16_t Calculate_Crane_Y_distance(MyMotor_3508_Crane_Type_Collection *motor_collect);
 
 #endif
