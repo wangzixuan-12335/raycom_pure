@@ -144,3 +144,27 @@ void Crane_Calculate(MyMotor_3508_Crane_Type_Collection *motor_collect,int16_t r
     int16_t output_Y2=Crane_Control_Loop(motor_collect->CRANE_Y2,rc_val3,Y2_MAX_POSITION,Y2_MIN_POSITION,Y2_MOTOR_SPEED_UP,Y2_MOTOR_SPEED_DOWN,Y2_RAMP_ACC_STEP,Y2_RAMP_DEC_STEP);
     SendCrane_ByRPM(motor_collect,CAN1,0x1FF,output_X1,output_Y1,output_Y2);
 }
+
+/**
+ * @description: 计算夹爪伸出距离(mm)
+ * @param {MyMotor_3508_Crane_Type_Collection} *motor_collect
+ * @return {int16_t} 距离
+ */
+int16_t Calculate_Crane_X_distance(MyMotor_3508_Crane_Type_Collection *motor_collect){
+    int16_t distance;
+    distance=(motor_collect->CRANE_X1->total_ecd)*(2.0f*PI*X1_GEAR_RADIUS_MM)/8192;
+    return distance;
+}
+
+/**
+ * @description: 计算夹爪离地面距离(mm)
+ * @param {MyMotor_3508_Crane_Type_Collection} *motor_collect
+ * @return {int16_t} 距离
+ */
+int16_t Calculate_Crane_Y_distance(MyMotor_3508_Crane_Type_Collection *motor_collect){
+    int16_t distance;
+    //Y1电机齿轮半径理应和Y2电机齿轮半径相同，这里取Y1齿轮半径
+    distance=((motor_collect->CRANE_Y1->total_ecd+motor_collect->CRANE_Y2->total_ecd)/2)*(2.0f*PI*Y1_GEAR_RADIUS_MM)/8192;
+    distance+=GRIPPER2GROUND_DISTANCE_MM;
+    return distance;
+}
