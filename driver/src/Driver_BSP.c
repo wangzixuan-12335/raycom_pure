@@ -714,12 +714,33 @@ void BSP_TIM2_Init(void) {
     // NVIC
     NVIC_InitTypeDef NVIC_InitStructure;
     NVIC_InitStructure.NVIC_IRQChannel                   = TIM2_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 7;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
     TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
     TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+}
+
+void BSP_TIM3_Init(void) {
+    // TIM
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure; // TIM 频率
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+    TIM_TimeBaseInitStructure.TIM_Period        = 900 - 1;
+    TIM_TimeBaseInitStructure.TIM_Prescaler     = 200 - 1;
+    TIM_TimeBaseInitStructure.TIM_CounterMode   = TIM_CounterMode_Up;
+    TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseInit(TIM3, &TIM_TimeBaseInitStructure);
+    TIM_Cmd(TIM3, ENABLE);
+    // NVIC
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel                   = TIM3_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+    TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
+    TIM_ClearFlag(TIM3, TIM_FLAG_Update);
 }
 
 void BSP_Stone_Id_Init(uint8_t *Board_Id, uint8_t *Robot_Id) {

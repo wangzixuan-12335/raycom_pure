@@ -1,7 +1,16 @@
 #include "stm32f4xx.h"
 #include "handle.h"
 
-
+/**
+ * @description: 上电时将电机目标值赋最小软件限位处，使龙门架自动运行到软件最低限位处
+ * @param {MyMotor_3508_Crane_Type_Collection} *motor_collect
+ * @return {*}
+ */
+void MyCrane_Make_Zero(MyMotor_3508_Crane_Type_Collection *motor_collect){
+    motor_collect->CRANE_X1->target_pos=X1_MIN_POSITION;
+    motor_collect->CRANE_Y1->target_pos=Y1_MIN_POSITION;
+    motor_collect->CRANE_Y2->target_pos=Y2_MIN_POSITION;
+}
 
 /**
  * @description: 
@@ -152,7 +161,7 @@ void Crane_Calculate(MyMotor_3508_Crane_Type_Collection *motor_collect,int16_t r
  */
 int16_t Calculate_Crane_X_distance(MyMotor_3508_Crane_Type_Collection *motor_collect){
     int16_t distance;
-    distance=(motor_collect->CRANE_X1->total_ecd)*(2.0f*PI*X1_GEAR_RADIUS_MM)/8192;
+    distance=(motor_collect->CRANE_X1->total_ecd-X1_MIN_POSITION)*(2.0f*PI*X1_GEAR_RADIUS_MM)/(8192*motor_collect->CRANE_X1->ReductionRatio);
     return distance;
 }
 
@@ -164,7 +173,7 @@ int16_t Calculate_Crane_X_distance(MyMotor_3508_Crane_Type_Collection *motor_col
 int16_t Calculate_Crane_Y_distance(MyMotor_3508_Crane_Type_Collection *motor_collect){
     int16_t distance;
     //Y1电机齿轮半径理应和Y2电机齿轮半径相同，这里取Y1齿轮半径
-    distance=((motor_collect->CRANE_Y1->total_ecd+motor_collect->CRANE_Y2->total_ecd)/2)*(2.0f*PI*Y1_GEAR_RADIUS_MM)/8192;
+    distance=((motor_collect->CRANE_Y1->total_ecd+motor_collect->CRANE_Y2->total_ecd-Y1_MIN_POSITION-Y2_MIN_POSITION)/2)*(2.0f*PI*Y1_GEAR_RADIUS_MM)/(8192*motor_collect->CRANE_Y1->ReductionRatio);
     distance+=GRIPPER2GROUND_DISTANCE_MM;
     return distance;
 }
