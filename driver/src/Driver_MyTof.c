@@ -69,7 +69,7 @@ void TOF_Init(void){
     status = VL53L1X_SetInterMeasurementInMs(dev_address, 110); 
 
     // 设置FOV角度
-    //VL53L1X_SetROI(dev_address, 4, 4);
+    VL53L1X_SetROI(dev_address, 13, 13);
 
     // 【第五步】开启测距使能
     status = VL53L1X_StartRanging(dev_address);

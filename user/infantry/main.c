@@ -44,7 +44,7 @@ void main(void) {
     Motor_3508_Init(&Motor_3508_LB,IsPositive_True,19,&Motor_3508_LB_PID,&Motor_3508_LB_Position_PID);
     Motor_3508_Init(&Motor_3508_RB,IsPositive_False,19,&Motor_3508_RB_PID,&Motor_3508_RB_Position_PID);
     //初始化龙门架电机结构体
-    Motor_3508_Init(&Motor_3508_Gantry_Crane_X1,IsPositive_True,19,&Motor_3508_Gantry_Crane_X1_PID,&Motor_3508_Gantry_Crane_X1_Position_PID);
+    Motor_3508_Init(&Motor_3508_Gantry_Crane_X1,IsPositive_False,19,&Motor_3508_Gantry_Crane_X1_PID,&Motor_3508_Gantry_Crane_X1_Position_PID);
     Motor_3508_Init(&Motor_3508_Gantry_Crane_Y1,IsPositive_True,19,&Motor_3508_Gantry_Crane_Y1_PID,&Motor_3508_Gantry_Crane_Y1_Position_PID);
     Motor_3508_Init(&Motor_3508_Gantry_Crane_Y2,IsPositive_False,19,&Motor_3508_Gantry_Crane_Y2_PID,&Motor_3508_Gantry_Crane_Y2_Position_PID);
 
@@ -71,6 +71,9 @@ void main(void) {
     Motor_3508_Gantry_Crane_Collection.CRANE_Y1=&Motor_3508_Gantry_Crane_Y1;
     Motor_3508_Gantry_Crane_Collection.CRANE_Y2=&Motor_3508_Gantry_Crane_Y2;
 
+    //龙门架自动运行到软件最低限位处
+    MyCrane_Make_Zero(&Motor_3508_Gantry_Crane_Collection);
+
     //初始化CAN通信
     //CAN接收写在CAN1中断内，根据不同报文头将数据写到结构体(eg)Motor_3508_LF中
     //CAN发送写在TIM2的定时(1kHZ)的中断中
@@ -80,6 +83,10 @@ void main(void) {
     //初始化TIM2，生成一个1KHZ的中断，主要业务写在这个中断中，要保证所有对象初始化完毕，故应最后开启
     //BSP_TIM2_Init经过修改，改了分频器，GPIOA初始化被注释
     BSP_TIM2_Init();
+
+    //初始化TIM3，生成一个0.5KHZ的中断，保持电机和底盘角度写在这个中断中
+    //若写在TIM2中会导致CAN发送不稳，导致电机过冲
+    BSP_TIM3_Init();
 
     //改变夹爪舵机角度
     //My_Servo_ChangeAngle(&PWM_Holding_Jaw_Servo,180);

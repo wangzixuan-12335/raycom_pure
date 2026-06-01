@@ -149,11 +149,22 @@ void TIM2_IRQHandler(void) {
         //舵机控制测试
         //SetServoByController(usart1_data_decoded.s1);
         
-        //遥控器函数
-        MyController(&usart1_data_decoded);
+        //遥控器函数(运动控制)
+        MyController_Move(&usart1_data_decoded);
 
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
         TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+    }
+}
+
+void TIM3_IRQHandler(void) {
+    if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET) {
+        
+        //遥控器函数(保持角度)
+        MyController_Stay(&usart1_data_decoded);
+
+        TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+        TIM_ClearFlag(TIM3, TIM_FLAG_Update);
     }
 }
 

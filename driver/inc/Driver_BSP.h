@@ -123,6 +123,7 @@ uint8_t Is_Button_Pressed(void);
 
 // TEMPORARY USE
 void BSP_TIM2_Init(void);
+void BSP_TIM3_Init(void);
 
 // USART
 void BSP_USART_Init(

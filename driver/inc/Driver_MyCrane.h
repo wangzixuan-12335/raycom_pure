@@ -4,40 +4,42 @@
 #include "Driver_MyMotor3508.h"
 
 //X1电机
-#define X1_MAX_POSITION         240000
-#define X1_MIN_POSITION         0
-#define X1_MOTOR_SPEED_UP       100.0f
-#define X1_MOTOR_SPEED_DOWN     -100.0f
+#define X1_MAX_POSITION         190000
+#define X1_MIN_POSITION         14000
+#define X1_MOTOR_SPEED_UP       50.0f
+#define X1_MOTOR_SPEED_DOWN     -50.0f
 #define X1_RAMP_ACC_STEP        2.0f
 #define X1_RAMP_DEC_STEP        4.0f
-#define X1_GEAR_RADIUS_MM       1
+#define X1_GEAR_RADIUS_MM       12
 
 //Y1电机
-#define Y1_MAX_POSITION         240000
-#define Y1_MIN_POSITION         0
+#define Y1_MAX_POSITION         440722
+#define Y1_MIN_POSITION         50000
 #define Y1_MOTOR_SPEED_UP       100.0f
 #define Y1_MOTOR_SPEED_DOWN     -100.0f
 #define Y1_RAMP_ACC_STEP        2.0f
 #define Y1_RAMP_DEC_STEP        4.0f
-#define Y1_GEAR_RADIUS_MM       1
+#define Y1_GEAR_RADIUS_MM       12.475
 
 //Y2电机
-#define Y2_MAX_POSITION         240000
-#define Y2_MIN_POSITION         0
+#define Y2_MAX_POSITION         440722
+#define Y2_MIN_POSITION         50000
 #define Y2_MOTOR_SPEED_UP       100.0f
 #define Y2_MOTOR_SPEED_DOWN     -100.0f
 #define Y2_RAMP_ACC_STEP        2.0f
 #define Y2_RAMP_DEC_STEP        4.0f
-#define Y2_GEAR_RADIUS_MM       1
+#define Y2_GEAR_RADIUS_MM       12.475
 
 //夹爪离地高度
-#define GRIPPER2GROUND_DISTANCE_MM 0 
+#define GRIPPER2GROUND_DISTANCE_MM 85 
 
 typedef struct{
     MyMotor_3508_Type *CRANE_X1;
     MyMotor_3508_Type *CRANE_Y1;
     MyMotor_3508_Type *CRANE_Y2;
 }MyMotor_3508_Crane_Type_Collection;
+
+void MyCrane_Make_Zero(MyMotor_3508_Crane_Type_Collection *motor_collect);
 
 void SendCrane_ByRPM(MyMotor_3508_Crane_Type_Collection *motor_collect,CAN_TypeDef *CANx, int16_t id, int16_t i_201, int16_t i_202, int16_t i_203);
 
