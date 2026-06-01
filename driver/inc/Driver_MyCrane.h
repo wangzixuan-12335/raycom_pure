@@ -19,7 +19,7 @@
 #define Y1_MOTOR_SPEED_DOWN     -100.0f
 #define Y1_RAMP_ACC_STEP        2.0f
 #define Y1_RAMP_DEC_STEP        4.0f
-#define Y1_GEAR_RADIUS_MM       12.475
+#define Y1_GEAR_RADIUS_MM       12.475f
 
 //Y2电机
 #define Y2_MAX_POSITION         440722
@@ -28,7 +28,7 @@
 #define Y2_MOTOR_SPEED_DOWN     -100.0f
 #define Y2_RAMP_ACC_STEP        2.0f
 #define Y2_RAMP_DEC_STEP        4.0f
-#define Y2_GEAR_RADIUS_MM       12.475
+#define Y2_GEAR_RADIUS_MM       12.475f
 
 //夹爪离地高度
 #define GRIPPER2GROUND_DISTANCE_MM 85 
