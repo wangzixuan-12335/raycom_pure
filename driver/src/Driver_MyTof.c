@@ -69,13 +69,13 @@ void TOF_Init(void){
     status = VL53L1X_SetInterMeasurementInMs(dev_address, 110); 
 
     // 设置FOV角度
-    VL53L1X_SetROI(dev_address, 13, 13);
+    VL53L1X_SetROI(dev_address, 16, 10);
 
     // 【第五步】开启测距使能
     status = VL53L1X_StartRanging(dev_address);
 }
 
-void TOF_Loop_Read(void){
+void TOF_Loop_Read(uint16_t *distance){
     uint8_t dataReady = 0;
     int8_t status;
 
@@ -86,9 +86,12 @@ void TOF_Loop_Read(void){
     if (status == 0 && dataReady == 1) 
     {
         // 读取具体的全标距离（单位：mm）
-        status = VL53L1X_GetDistance(dev_address, &distance_chassis_mm);
+        status = VL53L1X_GetDistance(dev_address, distance);
         
         //读完数据清除标志位
         status = VL53L1X_ClearInterrupt(dev_address);
+
+        //加上静差
+        *distance += TOF_OFFSET_MM;
     }
 }
