@@ -12,7 +12,7 @@
 #define TOF_VCC_3V3_RCC_CLK     RCC_AHB1Periph_GPIOE
 
 //传感器静差
-#define TOF_OFFSET_MM           20
+#define TOF_OFFSET_MM           10
 
 void TOF_Init(void);
 void TOF_Loop_Read(uint16_t *distance);

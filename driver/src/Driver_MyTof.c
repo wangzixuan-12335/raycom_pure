@@ -49,7 +49,8 @@ void TOF_Init(void){
         status = VL53L1X_BootState(dev_address, &sensorState);
         if(status != 0) {
             // 如果这里进去了，说明 I2C 连传感器都没检测到，检查接线或上拉电阻！
-            break; 
+			return;
+            //break; 
         }
         My_delay_ms(2);
     }

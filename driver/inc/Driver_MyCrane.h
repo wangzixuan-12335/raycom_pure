@@ -4,7 +4,7 @@
 #include "Driver_MyMotor3508.h"
 
 //X1电机
-#define X1_MAX_POSITION         190000
+#define X1_MAX_POSITION         350000
 #define X1_MIN_POSITION         14000
 #define X1_MOTOR_SPEED_UP       50.0f
 #define X1_MOTOR_SPEED_DOWN     -50.0f
@@ -13,7 +13,7 @@
 #define X1_GEAR_RADIUS_MM       12
 
 //Y1电机
-#define Y1_MAX_POSITION         440722
+#define Y1_MAX_POSITION         752000
 #define Y1_MIN_POSITION         50000
 #define Y1_MOTOR_SPEED_UP       100.0f
 #define Y1_MOTOR_SPEED_DOWN     -100.0f
@@ -22,7 +22,7 @@
 #define Y1_GEAR_RADIUS_MM       12.475f
 
 //Y2电机
-#define Y2_MAX_POSITION         440722
+#define Y2_MAX_POSITION         752000
 #define Y2_MIN_POSITION         50000
 #define Y2_MOTOR_SPEED_UP       100.0f
 #define Y2_MOTOR_SPEED_DOWN     -100.0f
