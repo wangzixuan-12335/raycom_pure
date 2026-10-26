@@ -13,8 +13,8 @@
 #define X1_GEAR_RADIUS_MM       12
 
 //Y1电机
-#define Y1_MAX_POSITION         752000
-#define Y1_MIN_POSITION         50000
+#define Y1_MAX_POSITION         672941
+#define Y1_MIN_POSITION         221526
 #define Y1_MOTOR_SPEED_UP       100.0f
 #define Y1_MOTOR_SPEED_DOWN     -100.0f
 #define Y1_RAMP_ACC_STEP        2.0f
@@ -22,8 +22,8 @@
 #define Y1_GEAR_RADIUS_MM       12.475f
 
 //Y2电机
-#define Y2_MAX_POSITION         752000
-#define Y2_MIN_POSITION         50000
+#define Y2_MAX_POSITION         672941
+#define Y2_MIN_POSITION         221526
 #define Y2_MOTOR_SPEED_UP       100.0f
 #define Y2_MOTOR_SPEED_DOWN     -100.0f
 #define Y2_RAMP_ACC_STEP        2.0f

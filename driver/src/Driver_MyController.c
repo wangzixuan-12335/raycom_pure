@@ -10,7 +10,13 @@ void MyController_Move(usart1_data_decoded_type *data){
         break;
     case 3:
         //底盘
-        Chassis_Calculate(&MyMotor_3508_Collection,CAN1,0x200,(float)data->r1y/1000.0f,(float)data->r1x/1000.0f,(float)data->r2x/330.0f,Chassis_L,Chassis_W);
+        float Vx=(float)data->r1y/1000.0f;
+        float Vy=(float)data->r1x/1000.0f;
+        float Vw=(float)data->r2x/330.0f;
+        if(Vx>0.6 && Vx<=1){
+            Vx+=0.1;
+        }
+        Chassis_Calculate(&MyMotor_3508_Collection,CAN1,0x200,Vx,Vy,Vw,Chassis_L,Chassis_W);
         break;
 	case 2:
         //哪怕软件掉电也给值，防止3508掉CAN发疯
